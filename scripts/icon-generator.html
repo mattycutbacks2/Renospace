@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Generator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #7C3AED;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .icon-preview {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .icon-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .icon-item canvas {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        button {
+            background: #7C3AED;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #6D28A9;
+        }
+        .download-all {
+            background: #10B981;
+            margin-top: 20px;
+        }
+        .download-all:hover {
+            background: #059669;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 App Icon Generator</h1>
+        
+        <div class="icon-preview">
+            <h3>Icon Preview</h3>
+            <div id="preview"></div>
+        </div>
+
+        <div class="icon-grid" id="iconGrid">
+            <!-- Icons will be generated here -->
+        </div>
+
+        <div style="text-align: center;">
+            <button class="download-all" onclick="downloadAll()">Download All Icons</button>
+        </div>
+    </div>
+
+    <script>
+        const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg
+  width="48"
+  height="48"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Outer purple rounded square -->
+  <rect
+    width="48"
+    height="48"
+    rx="8"
+    fill="#7C3AED"
+  />
+
+  <!-- House silhouette -->
+  <path
+    d="M24 12 L16 20 H20 V36 H28 V20 H32 L24 12 Z"
+    fill="#fff"
+  />
+
+  <!-- Window (purple cutout) -->
+  <rect
+    x="20"
+    y="24"
+    width="4"
+    height="4"
+    fill="#7C3AED"
+  />
+
+  <!-- Door (purple cutout) -->
+  <rect
+    x="22"
+    y="28"
+    width="4"
+    height="8"
+    fill="#7C3AED"
+  />
+
+  <!-- Notification dot -->
+  <circle
+    cx="36"
+    cy="12"
+    r="3"
+    fill="#FCD34D"
+    stroke="#fff"
+    stroke-width="1"
+  />
+</svg>`;
+
+        const iconSizes = [
+            { name: 'icon.png', size: 1024, description: 'Main App Icon' },
+            { name: 'adaptive-icon.png', size: 1024, description: 'Android Adaptive Icon' },
+            { name: 'favicon.png', size: 32, description: 'Web Favicon' },
+            { name: 'splash-icon.png', size: 200, description: 'Splash Screen' },
+        ];
+
+        function createIcon(size, name) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // Create an image from SVG
+            const img = new Image();
+            const svgBlob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                // Clear canvas
+                ctx.clearRect(0, 0, size, size);
+                
+                // Draw the SVG scaled to the canvas size
+                ctx.drawImage(img, 0, 0, size, size);
+                
+                // Create download link
+                canvas.toBlob(function(blob) {
+                    const downloadUrl = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = downloadUrl;
+                    link.download = name;
+                    link.textContent = `Download ${name}`;
+                    link.className = 'download-link';
+                    link.style.display = 'block';
+                    link.style.marginTop = '10px';
+                    link.style.color = '#7C3AED';
+                    link.style.textDecoration = 'none';
+                    
+                    const container = canvas.parentElement;
+                    container.appendChild(link);
+                });
+            };
+
+            img.src = url;
+
+            return canvas;
+        }
+
+        function generateIcons() {
+            const grid = document.getElementById('iconGrid');
+            grid.innerHTML = '';
+
+            iconSizes.forEach(icon => {
+                const item = document.createElement('div');
+                item.className = 'icon-item';
+                
+                const title = document.createElement('h4');
+                title.textContent = icon.description;
+                title.style.margin = '0 0 10px 0';
+                
+                const canvas = createIcon(icon.size, icon.name);
+                
+                const sizeText = document.createElement('p');
+                sizeText.textContent = `${icon.size}x${icon.size}px`;
+                sizeText.style.margin = '5px 0';
+                sizeText.style.color = '#666';
+                sizeText.style.fontSize = '14px';
+                
+                item.appendChild(title);
+                item.appendChild(canvas);
+                item.appendChild(sizeText);
+                
+                grid.appendChild(item);
+            });
+        }
+
+        function downloadAll() {
+            const links = document.querySelectorAll('.download-link');
+            links.forEach(link => {
+                setTimeout(() => {
+                    link.click();
+                }, 100);
+            });
+        }
+
+        // Show preview
+        document.getElementById('preview').innerHTML = svgContent;
+        
+        // Generate all icons
+        generateIcons();
+    </script>
+</body>
+</html> 

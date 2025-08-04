@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+  width="48"
+  height="48"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Outer purple rounded square -->
+  <rect
+    width="48"
+    height="48"
+    rx="8"
+    fill="#7C3AED"
+  />
+
+  <!-- House silhouette -->
+  <path
+    d="
+      M24 12        <!-- Roof apex -->
+      L16 20       <!-- Left roof corner -->
+      H20          <!-- Left wall top -->
+      V36          <!-- Left wall bottom -->
+      H28          <!-- Right wall bottom -->
+      V20          <!-- Right wall top -->
+      H32          <!-- Right roof corner -->
+      L24 12       <!-- Back to apex -->
+      Z
+    "
+    fill="#fff"
+  />
+
+  <!-- Window (purple cutout) -->
+  <rect
+    x="20"
+    y="24"
+    width="4"
+    height="4"
+    fill="#7C3AED"
+  />
+
+  <!-- Door (purple cutout) -->
+  <rect
+    x="22"
+    y="28"
+    width="4"
+    height="8"
+    fill="#7C3AED"
+  />
+
+  <!-- Notification dot -->
+  <circle
+    cx="36"
+    cy="12"
+    r="3"
+    fill="#FCD34D"
+    stroke="#fff"
+    stroke-width="1"
+  />
+</svg> 

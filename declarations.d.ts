@@ -1,0 +1,1 @@
+declare module '@terrylinla/react-native-sketch-canvas'; 
